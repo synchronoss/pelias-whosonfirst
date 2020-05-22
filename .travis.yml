@@ -4,6 +4,7 @@ notifications:
 node_js:
   - 10
   - 12
+  - 14
 script: npm run travis
 before_install:
   - npm i -g npm
