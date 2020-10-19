@@ -1022,7 +1022,7 @@ tape('multi-lang index test', (test) => {
     });
   });
 
-  test.test('name langs should be without duplicates', function (t) {
+  test.test('name langs should be with duplicates', function (t) {
     var input = [
       {
         id: 54321,
@@ -1040,7 +1040,7 @@ tape('multi-lang index test', (test) => {
     };
 
     test_stream(input, extractFields.create(), function (err, actual) {
-      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should not have duplicates');
+      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should have duplicates');
       t.end();
     });
   });
@@ -1050,7 +1050,7 @@ tape('multi-lang index test', (test) => {
       {
         id: 54321,
         properties: {
-          'name:fra_x_preferred': ['preferredFRA1', 'preferredFRA2'],
+          'name:fra_x_preferred': ['preferredFRA1', 'preferredFRA2', 'preferredFRE1'],
           'name:fre_x_preferred': ['preferredFRE1'],
           'wof:name': ['prefered1']
         }
@@ -1062,7 +1062,7 @@ tape('multi-lang index test', (test) => {
     };
 
     test_stream(input, extractFields.create(), function (err, actual) {
-      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should not have duplicates');
+      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should have duplicates');
       t.end();
     });
   });
@@ -1087,7 +1087,7 @@ tape('multi-lang index test', (test) => {
     };
 
     test_stream(input, extractFields.create(), function (err, actual) {
-      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should not have duplicates');
+      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should have duplicates');
       t.end();
     });
   });

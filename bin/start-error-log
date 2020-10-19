@@ -5,6 +5,7 @@ rm -rf error_log.txt
 
 node --max_old_space_size=6000 import.js  &> import_log.txt && cat import_log.txt | awk '$1 ~ /error/' >> error_log.txt
 
+echo -e "Starting mapping at............: $now"
 echo -e "..............................."
 echo -n 'The total number of errors are: ' & wc -l error_log.txt
 echo -e "..............................."
@@ -18,3 +19,4 @@ echo -e "..............................."
 echo -n 'Total Error type: transaction error reached max retries ' & grep "transaction error reached max retries" error_log.txt | wc -l
 echo -n 'Total Error type: invalid resp from es bulk index operation: ' & grep "invalid resp from es bulk index operation" error_log.txt  | wc -l
 echo -n 'Total Error type: esclient error message=Request Entity Too Large, status=413: ' & grep "Request Entity Too Large"   error_log.txt  | wc -l
+echo -e "Mapping completed at............: $now"
