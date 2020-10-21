@@ -2,7 +2,7 @@
 global.geo_shape_polygon=true;
 
 // Validation for constants
-if(global.geo_shape_polygon === true || global.geo_shape_polygon === false){
+if (global.geo_shape_polygon !== undefined){
   console.log('\n Running the importer against the ES index that contains the polygon geo-shape data: ' + global.geo_shape_polygon + '.');
 }else{
   console.error('The global.geo_shape_polygon property in the global_const.js file has not been correctly configured.\n');
