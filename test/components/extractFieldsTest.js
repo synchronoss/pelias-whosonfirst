@@ -14,10 +14,10 @@ var extractFields = require('../../src/components/extractFields');
  * Callback signature should be something like function callback(error, result)
  */
 function test_stream(input, testedStream, callback) {
-    var input_stream = event_stream.readArray(input);
-    var destination_stream = event_stream.writeArray(callback);
+  var input_stream = event_stream.readArray(input);
+  var destination_stream = event_stream.writeArray(callback);
 
-    input_stream.pipe(testedStream).pipe(destination_stream);
+  input_stream.pipe(testedStream).pipe(destination_stream);
 }
 
 tape('readStreamComponents', function(test) {
@@ -73,6 +73,10 @@ tape('readStreamComponents', function(test) {
       }
     ];
 
+    if (global.geo_shape_polygon === true) {
+      expected[0].shape = undefined;
+    }
+
     test_stream(input, extractFields.create(), function(err, actual) {
       t.deepEqual(actual, expected, 'stream should contain only objects with id and properties');
       t.end();
@@ -105,6 +109,10 @@ tape('readStreamComponents', function(test) {
       }
     ];
 
+    if (global.geo_shape_polygon === true) {
+      expected[0].shape = undefined;
+    }
+
     test_stream(input, extractFields.create(), function(err, actual) {
       t.deepEqual(actual, expected, 'stream should contain only objects with id and properties');
       t.end();
@@ -127,7 +135,7 @@ tape('readStreamComponents', function(test) {
       }
     ];
 
-    const expected = [
+    var expected = [
       {
         id: 12345,
         name: 'name 1',
@@ -147,6 +155,10 @@ tape('readStreamComponents', function(test) {
         ]
       }
     ];
+
+    if (global.geo_shape_polygon === true) {
+      expected[0].shape = undefined;
+    }
 
     test_stream(input, extractFields.create(), function(err, actual) {
       t.deepEqual(actual, expected, 'stream should contain only objects with id and properties');
@@ -987,7 +999,7 @@ tape('name alias tests', (test) => {
 });
 
 tape('multi-lang index test', (test) => {
-  test.test('all elements in default language should not be in other indexes', function (t) {
+  test.test('all elements in default language should be in other indexes also', function (t) {
     var input = [{
       id: 54321,
       properties: {
@@ -1000,8 +1012,8 @@ tape('multi-lang index test', (test) => {
 
     const expected_name_langs = {
       'en': ['preferredENG1'],
-      'fr': ['preferredFRA1', 'preferredFRA2'],
-      'es': ['variantSPA1', 'variantSPA2']
+      'fr': ['default1','preferredFRA1', 'preferredFRA2'],
+      'es': ['default2','variantSPA1', 'variantSPA2']
     };
 
     test_stream(input, extractFields.create(), function (err, actual) {
@@ -1010,7 +1022,7 @@ tape('multi-lang index test', (test) => {
     });
   });
 
-  test.test('name langs should be without duplicates', function (t) {
+  test.test('name langs should be with duplicates', function (t) {
     var input = [
       {
         id: 54321,
@@ -1028,7 +1040,7 @@ tape('multi-lang index test', (test) => {
     };
 
     test_stream(input, extractFields.create(), function (err, actual) {
-      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should not have duplicates');
+      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should have duplicates');
       t.end();
     });
   });
@@ -1038,7 +1050,7 @@ tape('multi-lang index test', (test) => {
       {
         id: 54321,
         properties: {
-          'name:fra_x_preferred': ['preferredFRA1', 'preferredFRA2'],
+          'name:fra_x_preferred': ['preferredFRA1', 'preferredFRA2', 'preferredFRE1'],
           'name:fre_x_preferred': ['preferredFRE1'],
           'wof:name': ['prefered1']
         }
@@ -1050,7 +1062,7 @@ tape('multi-lang index test', (test) => {
     };
 
     test_stream(input, extractFields.create(), function (err, actual) {
-      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should not have duplicates');
+      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should have duplicates');
       t.end();
     });
   });
@@ -1075,7 +1087,7 @@ tape('multi-lang index test', (test) => {
     };
 
     test_stream(input, extractFields.create(), function (err, actual) {
-      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should not have duplicates');
+      t.deepEqual(actual[0].name_langs, expected_name_langs, 'should have duplicates');
       t.end();
     });
   });

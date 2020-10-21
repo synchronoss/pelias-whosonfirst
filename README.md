@@ -50,6 +50,11 @@ npm run download
 npm start
 ```
 
+Alternatively running the below will generate an additional error log
+```
+npm start-error-log
+```
+
 
 ## Configuration
 
@@ -101,6 +106,17 @@ The maximum number of files to download simultaneously. Higher values can be fas
 * Default: `https://data.geocode.earth/wof/dist`
 
 The location to download Who's on First data from. Changing this can be useful to use custom data, pin data to a specific date, etc.
+
+### Configuring the geo_shape type key
+
+The global.geo_shape_polygon property in the global_const.js file can be set to true (polygon) or false (shape) to determine if the importer should be run against the Pelias ES index that contains the polygon geo-shape data.
+
+## Language configuration
+
+The iso639.js file (found in src/helpers) should be updated with the 2 and 3 ISO Country Codes for the language translation to be imported into Elasticsearch.
+The relevant codes can be found in https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes.
+Currently English, French, Spanish, Japanese and Dutch are specified.
+
 
 ## Downloading the Data
 
