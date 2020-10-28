@@ -5,7 +5,9 @@ var maxRetry = 3;
 var currentRetry = 0;
 
 const verifyConnection = () => {
-    configValidation.validate(require('pelias-config').generate(), onResponseHandler);
+    if (process.env.NODE_ENV !== 'test') {
+        configValidation.validate(require('pelias-config').generate(), onResponseHandler);
+    }
 };
 
 const onResponseHandler = (error, result) => {
@@ -17,6 +19,7 @@ const onResponseHandler = (error, result) => {
 
     if(currentRetry >= maxRetry) {
         //throw error
+        currentRetry = 0;
         throw error;
     }
 

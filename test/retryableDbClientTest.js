@@ -1,11 +1,60 @@
 'use strict';
 
 const tape = require('tape');
+const proxyquire = require('proxyquire').noCallThru();
+const intercept = require('intercept-stdout');
 
 tape('Test DB Client', function(test) {
-    test.test('Test DB Client does stuff', function (t) {
-        t.end();
+  var config = {};
+  test.test('configValidation not throwing error should return a function', function(t) {
+      const factory = proxyquire('../src/retryableDbClient', {
+        './configValidation': {validate: (config, handler) => {
+            handler(null, true);
+          }
+        }
+      });
+  
+      t.equal(typeof factory, 'function', 'stream factory');
+      t.end();
+  
     });
 
-    test.end();
+    test.test('configValidation throwing error should rethrow', function(t) {
+      const env = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'development';
+      let num = 0;
+
+      var stdout = '';
+
+      // intercept stdout
+      var unhook_intercept = intercept(
+        function(txt) { stdout += txt; return ''; }
+      );
+  
+      const factory = proxyquire('../src/retryableDbClient', {
+        './configValidation': { validate: (config, handler) => {
+            if(num === 0) {
+              num++;
+              handler(new Error('elasticsearch index doesn\'t exist'), false);
+            } else {
+              handler(null, true);
+            }
+          }
+        }
+      });
+
+      t.ok(stdout.match(/Attempting to re-establish connection to ElasticSearch/));
+      t.ok(stdout.match(/Retry Count 1\/3/));
+      t.ok(stdout.match(/Connection Re-established with ElasticSearch/));
+
+      unhook_intercept();
+  
+      process.env.NODE_ENV = env;
+  
+      t.equal(typeof factory, 'function', 'stream factory');
+      t.end();
+  
+    });
+
+  test.end();
 });

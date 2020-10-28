@@ -3,7 +3,7 @@ require ('./global_const');
 var peliasConfig = require( 'pelias-config' ).generate(require('./schema'));
 var readStreamModule = require('./src/readStream');
 var importStream = require('./src/importStream');
-var peliasDbclient = require( 'pelias-dbclient' );
+var peliasDbclient = require('./src/retryableDbClient');
 var peliasDocGenerators = require('./src/peliasDocGenerators');
 var hierarchyFinder = require('./src/hierarchyFinder');
 var bundles = require('./src/bundleList');

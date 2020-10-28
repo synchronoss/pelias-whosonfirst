@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-node test/test.js | npx tap-dot
+NODE_ENV=test node test/test.js | npx tap-dot

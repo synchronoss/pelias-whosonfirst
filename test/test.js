@@ -15,3 +15,4 @@ require ('./module.js');
 require ('./bundleList.js');
 require ('./functional.js');
 require ('./configValidationTest.js');
+require ('./retryableDbClientTest.js');
