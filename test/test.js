@@ -13,4 +13,5 @@ require ('./readStreamTest.js');
 require ('./schema.js');
 require ('./module.js');
 require ('./bundleList.js');
-require('./functional.js');
+require ('./functional.js');
+require ('./configValidationTest.js');
